@@ -1,3 +1,6 @@
 # data folders
 image_data/
 video_data/
+
+*.pt
+# *.yaml
