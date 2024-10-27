@@ -331,7 +331,7 @@ def generate_plots(all_info, summary_metrics):
 
 if __name__ == '__main__':
     # Define the sequences to evaluate
-    sequences = ['MOT16-11']  # Add your sequence names here
+    sequences = ['MOT16-11', 'MOT16-13']  # Add your sequence names here
 
     # Define the directories for tracking results and ground truth data
     track_dir = 'MOT_Evaluation\data'  # Replace with your tracking results directory

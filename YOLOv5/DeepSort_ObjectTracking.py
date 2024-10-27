@@ -10,15 +10,15 @@ class YoloDetector():
     def __init__(self, model_name):
         self.model = self.load_model(model_name)
         self.classes = self.model.names
-        # self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.device = 'cpu'
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        # self.device = 'cpu'
         print("Using Device: ", self.device)
 
     def load_model(self, model_name):
         if model_name:
             model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_name, force_reload=True)
         else:
-            model = torch.hub.load('ultralytics/yolov5', 'yolov5n', pretrained=True)
+            model = torch.hub.load('ultralytics/yolov5', 'yolov5l', pretrained=True)
         return model
 
     def score_frame(self, frame):
@@ -45,8 +45,9 @@ class YoloDetector():
             if row[4] >= confidence:
                 x1, y1, x2, y2 = int(row[0] * width), int(row[1] * height), int(row[2] * width), int(row[3] * height)
                 
-                if self.class_to_label(labels[i]) == 'person':
-                    detections.append(([x1, y1, int(x2 - x1), int(y2 - y1)], row[4].item(), 'person'))
+                # if self.class_to_label(labels[i]) == 'person':
+                #     detections.append(([x1, y1, int(x2 - x1), int(y2 - y1)], row[4].item(), 'person'))
+                detections.append(([x1, y1, int(x2 - x1), int(y2 - y1)], row[4].item(), labels[i]))
         
         return frame, detections
 
@@ -65,9 +66,11 @@ object_tracker = DeepSort(max_age=5,
                 embedder_gpu=True)
 
 # Open video capture
-cap = cv2.VideoCapture("walking.mp4")
-# cap = cv2.VideoCapture(0)
-# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+# cap = cv2.VideoCapture("walking.mp4")
+cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_2.mp4") 
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Set up environment variable for compatibility
@@ -75,6 +78,9 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 while cap.isOpened():
     success, img = cap.read()
+    # Resize image using fx and fy for scaling
+    img = cv2.resize(img, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_LINEAR)
+
     if not success:
         break
 

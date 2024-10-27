@@ -18,7 +18,7 @@ class YoloDetector():
         if model_name:
             model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_name, force_reload=True)
         else:
-            model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+            model = torch.hub.load('ultralytics/yolov5', 'yolov5l', pretrained=True)
         return model
 
     def score_frame(self, frame):
@@ -74,8 +74,10 @@ detector = YoloDetector(model_name=None)
 # cap = cv2.VideoCapture("scisors.mp4")
 
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+# cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_2.mp4") 
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Resize the frame using scaling factors
 # Set up environment variable for compatibility
@@ -83,7 +85,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 while cap.isOpened():
     success, img = cap.read()
-    # img = cv2.resize(img, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
+    img = cv2.resize(img, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
 
     if not success:
         break
