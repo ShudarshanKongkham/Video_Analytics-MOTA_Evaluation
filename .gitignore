@@ -4,3 +4,29 @@ video_data/
 
 *.pt
 # *.yaml
+
+
+MOT_Evaluation//MOT16.zip
+
+MOT_Evaluation/MOT16/train/MOT16-11/img1
+MOT_Evaluation/MOT16/train/MOT16-02/img1
+MOT_Evaluation/MOT16/train/MOT16-04/img1
+MOT_Evaluation/MOT16/train/MOT16-05/img1
+MOT_Evaluation/MOT16/train/MOT16-09/img1
+MOT_Evaluation/MOT16/train/MOT16-10/img1
+
+MOT_Evaluation/MOT16/train/MOT16-11/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-02/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-04/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-05/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-09/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-10/yolov9/*avi
+MOT_Evaluation/MOT16/train/MOT16-13/yolov9/*avi
+
+MOT_Evaluation/MOT16/train/MOT16-11/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-02/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-04/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-05/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-09/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-10/YOLOv5/*avi
+MOT_Evaluation/MOT16/train/MOT16-13/YOLOv5/*avi

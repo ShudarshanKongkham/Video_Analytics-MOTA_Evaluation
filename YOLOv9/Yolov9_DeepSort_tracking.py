@@ -41,7 +41,7 @@ def inference(image, model, names, deepsort, line_thickness=2):
 
     # Run inference
     pred = model(img)[0]
-    pred = non_max_suppression(pred, conf_thres=0.5, iou_thres=0.45, max_det=100)
+    pred = non_max_suppression(pred, conf_thres=0.3, iou_thres=0.45, max_det=100)
 
     # Initialize annotator
     im0 = image.copy()
@@ -83,8 +83,8 @@ def inference(image, model, names, deepsort, line_thickness=2):
 def run(weights, device):
     """Run real-time object detection and tracking using the webcam."""
     model, names = load_model(weights, device)
-    # cap = cv2.VideoCapture(0)  # Open webcam
-    cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_1.mp4") 
+    cap = cv2.VideoCapture(0)  # Open webcam
+    # cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_1.mp4") 
 
 
     if not cap.isOpened():
@@ -100,7 +100,7 @@ def run(weights, device):
 
     while True:
         ret, frame = cap.read()
-        frame = cv2.resize(frame, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
+        # frame = cv2.resize(frame, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
 
         if not ret:
             print("Error: Failed to capture frame.")
