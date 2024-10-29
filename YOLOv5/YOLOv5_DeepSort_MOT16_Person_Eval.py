@@ -46,109 +46,96 @@ class YoloDetector():
 
         return frame, detections
 
-# Initialize YOLO detector
-detector = YoloDetector(model_name=None)
+def process_images_from_folder(device, img_folder):
+    """Process images from a folder and save results as video and res.txt."""
+    detector = YoloDetector(model_name=None)
 
-# Initialize DeepSORT tracker
-object_tracker = DeepSort(
-    max_age=5,
-    n_init=2,
-    nms_max_overlap=1.0,
-    max_cosine_distance=0.7,
-    nn_budget=None,
-    embedder="mobilenet",
-    half=True,
-    bgr=True,
-    embedder_gpu=True
-)
+    # Initialize DeepSORT tracker
+    object_tracker = DeepSort(
+        max_age=5,
+        n_init=2,
+        nms_max_overlap=1.0,
+        max_cosine_distance=0.7,
+        nn_budget=None,
+        embedder="mobilenet",
+        half=True,
+        bgr=True,
+        embedder_gpu=True
+    )
 
-# Specify the path to the img1 folder
-img_folder = "G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/MOT_Evaluation/MOT16/train/MOT16-13/img1"
-img_files = sorted(os.listdir(img_folder))
-img_paths = [os.path.join(img_folder, img_file) for img_file in img_files]
+    # Prepare output paths
+    output_folder = os.path.join(os.path.dirname(img_folder), "YOLOv5")
+    os.makedirs(output_folder, exist_ok=True)
+    video_name = os.path.basename(os.path.dirname(img_folder)) + ".avi"
+    output_path = os.path.join(output_folder, video_name)
+    res_file_path = os.path.join(output_folder, "res.txt")
 
-# Create a 'YOLOv5' folder inside 'MOT16-13' for saving the output video
-output_folder = os.path.join(os.path.dirname(img_folder), "YOLOv5")
-os.makedirs(output_folder, exist_ok=True)
+    # Initialize video writer and res.txt
+    img_files = sorted(os.listdir(img_folder))
+    img_paths = [os.path.join(img_folder, img_file) for img_file in img_files]
+    if not img_paths:
+        print(f"No images found in {img_folder}")
+        return
 
-# Set output video path
-video_name = os.path.basename(os.path.dirname(img_folder)) + ".avi"
-output_path = os.path.join(output_folder, video_name)
+    sample_img = cv2.imread(img_paths[0])
+    if sample_img is None:
+        print(f"Error: Could not read {img_paths[0]}.")
+        return
 
-# Initialize the res.txt file for storing tracking results
-res_file_path = os.path.join(output_folder, "res.txt")
-res_file = open(res_file_path, "w")
+    height, width = sample_img.shape[:2]
+    fps = 25  # Assuming 25 FPS
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+    res_file = open(res_file_path, "w")
 
-# Load the first image to get frame dimensions
-sample_img = cv2.imread(img_paths[0])
-if sample_img is None:
-    print(f"Error: Could not read {img_paths[0]}.")
-    exit()
-
-height, width = sample_img.shape[:2]
-fps = 25  # Assuming 25 FPS
-
-# Initialize video writer
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
-
-# Set up environment variable for compatibility
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
-# Process each image
-for frame_id, img_path in enumerate(img_paths, start=1):
-    img = cv2.imread(img_path)
-
-    if img is None:
-        print(f"Error reading image: {img_path}. Skipping.")
-        continue
-
-    start = time.perf_counter()
-
-    # Perform detection
-    results = detector.score_frame(img)
-    img, detections = detector.plot_boxes(results, img, confidence=0.5)
-
-    # Update tracks
-    tracks = object_tracker.update_tracks(detections, frame=img)
-
-    # Draw boxes and IDs, and write to res.txt
-    for track in tracks:
-        if not track.is_confirmed():
+    # Process each image
+    for frame_id, img_path in enumerate(img_paths, start=1):
+        img = cv2.imread(img_path)
+        if img is None:
+            print(f"Error reading image: {img_path}. Skipping.")
             continue
 
-        track_id = track.track_id
-        bbox = track.to_ltrb()  # Get bounding box [left, top, right, bottom]
-        x1, y1, x2, y2 = map(int, bbox)
+        start = time.perf_counter()
+        results = detector.score_frame(img)
+        img, detections = detector.plot_boxes(results, img, confidence=0.5)
+        tracks = object_tracker.update_tracks(detections, frame=img)
 
-        # Write to res.txt in MOT16 format: <frame>,<id>,<x>,<y>,<w>,<h>,<confidence>,<class>,<visibility>
-        res_file.write(f"{frame_id},{track_id},{x1},{y1},{x2 - x1},{y2 - y1},1.0,1,1\n")
+        # Draw boxes, IDs, and write to res.txt
+        for track in tracks:
+            if not track.is_confirmed():
+                continue
 
-        # Draw bounding box and labels neatly
-        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-        cv2.putText(img, f"Person", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-        cv2.putText(img, f"ID: {track_id}", (x1, y1 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            track_id = track.track_id
+            bbox = track.to_ltrb()
+            x1, y1, x2, y2 = map(int, bbox)
+            res_file.write(f"{frame_id},{track_id},{x1},{y1},{x2 - x1},{y2 - y1},1.0,1,1\n")
+            cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+            cv2.putText(img, "Person", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(img, f"ID: {track_id}", (x1, y1 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
-    end = time.perf_counter()
-    totalTime = end - start
-    fps = 1 / totalTime
+        totalTime = time.perf_counter() - start
+        fps = 1 / totalTime
+        cv2.putText(img, f'FPS: {int(fps)}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+        out.write(img)
+        cv2.imshow('YOLOv5 with DeepSORT', img)
 
-    # Display FPS on the frame
-    cv2.putText(img, f'FPS: {int(fps)}', (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
 
-    # Write the frame to the output video
-    out.write(img)
+    out.release()
+    res_file.close()
+    cv2.destroyAllWindows()
 
-    # Show the annotated frame
-    cv2.imshow('YOLOv5 with DeepSORT', img)
+    print(f"Output video saved at: {output_path}")
+    print(f"Tracking results saved at: {res_file_path}")
 
-    if cv2.waitKey(1) & 0xFF == 27:  # Press 'ESC' to exit
-        break
+# Run the function for multiple sequences
+if __name__ == "__main__":
 
-# Cleanup resources
-out.release()
-res_file.close()
-cv2.destroyAllWindows()
+    device = 0  # Use GPU (0) or CPU ('cpu')
+    MOT_sequences = ["MOT16-02", "MOT16-04", "MOT16-05", "MOT16-09", "MOT16-10", "MOT16-11", "MOT16-13"]
 
-print(f"Output video saved at: {output_path}")
-print(f"Tracking results saved at: {res_file_path}")
+    for MOT_folder in MOT_sequences:
+        print(f"Generating for {MOT_folder}...")
+        img_folder = f"G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/MOT_Evaluation/MOT16/train/{MOT_folder}/img1"
+        process_images_from_folder( device, img_folder)

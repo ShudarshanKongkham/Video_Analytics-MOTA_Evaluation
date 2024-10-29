@@ -177,14 +177,14 @@ def run(weights='yolov9-c.pt', device=0):
     model, names = load_model(weights, device)
     tracker = DeepSort(max_age=30, n_init=3, nn_budget=None, embedder_gpu=True, half=True)
 
-    cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_4.mp4")
+    cap = cv2.VideoCapture("G:/UTS/2024/Spring_2024/Image Processing/Assignment/Video-Analytics-/data_/traffic_1.mp4")
 
     if not cap.isOpened():
         print("Error: Could not open video.")
         return
 
     ret, frame = cap.read()
-    frame = cv2.resize(frame, None, fx=1, fy=1, interpolation=cv2.INTER_LINEAR)
+    frame = cv2.resize(frame, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
 
     if not ret:
         print("Error: Could not read video frame.")
@@ -215,7 +215,7 @@ def run(weights='yolov9-c.pt', device=0):
 
     while True:
         ret, frame = cap.read()
-        frame = cv2.resize(frame, None, fx=1, fy=1, interpolation=cv2.INTER_LINEAR)
+        frame = cv2.resize(frame, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
 
         if not ret:
             print("End of video.")

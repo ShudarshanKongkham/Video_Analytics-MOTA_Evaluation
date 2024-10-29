@@ -222,44 +222,7 @@ def evaluate_benchmark(all_info):
     ]
     return metrics
 
-def evaluate_tracking(sequences, track_dir, gt_dir):
-    """
-    Evaluate tracking results against ground truth data for given sequences.
-
-    Parameters:
-    - sequences: list of str, names of sequences to evaluate
-    - track_dir: str, directory containing tracking results
-    - gt_dir: str, directory containing ground truth data
-    """
-    all_info = []
-    for seqname in sequences:
-        print(f'\nEvaluating sequence: {seqname}')
-        track_res = os.path.join(track_dir, seqname, 'res.txt')
-        gt_file = os.path.join(gt_dir, seqname, 'gt.txt')
-        assert os.path.exists(track_res), f'Tracking result {track_res} does not exist.'
-        assert os.path.exists(gt_file), f'Ground truth file {gt_file} does not exist.'
-
-        # Read tracking results and ground truth data
-        trackDB = read_txt_to_struct(track_res)
-        gtDB = read_txt_to_struct(gt_file)
-
-        # Preprocess ground truth data
-        gtDB, distractor_ids = extract_valid_gt_data(gtDB)
-
-        # Evaluate sequence
-        metrics, extra_info = evaluate_sequence(trackDB, gtDB, distractor_ids)
-        print_metrics(f'{seqname} Evaluation', metrics)
-        extra_info.seq_name = seqname  # Store sequence name for plotting
-        all_info.append(extra_info)
-
-    # Evaluate the entire benchmark
-    all_metrics = evaluate_benchmark(all_info)
-    print_metrics('Summary Evaluation', all_metrics)
-
-    # Generate evaluation plots
-    generate_plots(all_info, all_metrics)
-
-def generate_plots(all_info, summary_metrics):
+def generate_plots(all_info, summary_metrics, model):
     """
     Generate plots of evaluation metrics for each sequence and the overall benchmark.
 
@@ -277,7 +240,7 @@ def generate_plots(all_info, summary_metrics):
     plt.bar(sequences, MOTA_list, color='skyblue')
     plt.xlabel('Sequence')
     plt.ylabel('MOTA (%)')
-    plt.title('Multiple Object Tracking Accuracy (MOTA) per Sequence')
+    plt.title(f'Multiple Object Tracking Accuracy (MOTA) per Sequence for {model}')
     plt.ylim(0, 100)
     plt.grid(axis='y')
     plt.show()
@@ -287,7 +250,7 @@ def generate_plots(all_info, summary_metrics):
     plt.bar(sequences, MOTP_list, color='salmon')
     plt.xlabel('Sequence')
     plt.ylabel('MOTP (%)')
-    plt.title('Multiple Object Tracking Precision (MOTP) per Sequence')
+    plt.title(f'Multiple Object Tracking Precision (MOTP) per Sequence for {model}')
     plt.ylim(0, 100)
     plt.grid(axis='y')
     plt.show()
@@ -297,7 +260,7 @@ def generate_plots(all_info, summary_metrics):
     plt.bar(sequences, IDF1_list, color='lightgreen')
     plt.xlabel('Sequence')
     plt.ylabel('IDF1 Score (%)')
-    plt.title('IDF1 Score per Sequence')
+    plt.title(f'IDF1 Score per Sequence for {model}')
     plt.ylim(0, 100)
     plt.grid(axis='y')
     plt.show()
@@ -318,7 +281,7 @@ def generate_plots(all_info, summary_metrics):
     bars = plt.bar(metrics_names, summary_values, color='orchid')
     plt.xlabel('Metrics')
     plt.ylabel('Value (%)')
-    plt.title('Summary of Evaluation Metrics')
+    plt.title(f'Summary of Evaluation Metrics for {model}')
     plt.ylim(0, 100)
     plt.grid(axis='y')
 
@@ -329,13 +292,57 @@ def generate_plots(all_info, summary_metrics):
                  f'{height:.2f}%', ha='center', va='bottom')
     plt.show()
 
+def evaluate_tracking(sequences, base_dir, model):
+    """
+    Evaluate tracking results against ground truth data for given sequences.
+
+    Parameters:
+    - sequences: list of str, names of sequences to evaluate
+    - base_dir: str, base directory containing all sequence folders
+    """
+    all_info = []
+    for seqname in sequences:
+        print(f'\nEvaluating sequence: {seqname}')
+
+        # Paths to res.txt and gt.txt based on your folder structure
+        seq_dir = os.path.join(base_dir, seqname)
+        track_res = os.path.join(seq_dir, model, 'res.txt')
+        gt_file = os.path.join(seq_dir, 'gt', 'gt.txt')
+
+        # Check if files exist
+        assert os.path.exists(track_res), f'Tracking result {track_res} does not exist.'
+        assert os.path.exists(gt_file), f'Ground truth file {gt_file} does not exist.'
+
+        # Read tracking results and ground truth data
+        trackDB = read_txt_to_struct(track_res)
+        gtDB = read_txt_to_struct(gt_file)
+
+        # Preprocess ground truth data
+        gtDB, distractor_ids = extract_valid_gt_data(gtDB)
+
+        # Evaluate sequence
+        metrics, extra_info = evaluate_sequence(trackDB, gtDB, distractor_ids)
+        print_metrics(f'{seqname} Evaluation', metrics)
+        extra_info.seq_name = seqname  # Store sequence name for plotting
+        all_info.append(extra_info)
+
+    # Evaluate the entire benchmark
+    all_metrics = evaluate_benchmark(all_info)
+    print_metrics('Summary Evaluation', all_metrics)
+
+   # Generate evaluation plots
+    generate_plots(all_info, all_metrics, model)
+
+
 if __name__ == '__main__':
     # Define the sequences to evaluate
-    sequences = ['MOT16-11', 'MOT16-13']  # Add your sequence names here
+    sequences = ["MOT16-02", "MOT16-04", "MOT16-05", "MOT16-09", "MOT16-10", "MOT16-11", "MOT16-13"]
 
-    # Define the directories for tracking results and ground truth data
-    track_dir = 'MOT_Evaluation\data'  # Replace with your tracking results directory
-    gt_dir = 'MOT_Evaluation\data'    # Replace with your ground truth data directory
+    # Define the base directory containing all sequence folders
+    base_dir = 'MOT_Evaluation/MOT16/train'  # Replace with your base directory
 
-    # Run evaluation
-    evaluate_tracking(sequences, track_dir, track_dir)
+    evaluate_models = ["YOLOv5", "yolov9"]
+
+    for model in evaluate_models:
+        # Run evaluation
+        evaluate_tracking(sequences, base_dir, model)
