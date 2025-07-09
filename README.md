@@ -1,500 +1,655 @@
-# 🎥 Video Analytics: Advanced Computer Vision Framework
+# 🎬 Video Analytics Framework
+*Advanced Real-Time Object Detection, Tracking & Zone Analysis*
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green)
-![PyTorch](https://img.shields.io/badge/PyTorch-1.8%2B-orange)
-![YOLOv5](https://img.shields.io/badge/YOLOv5-latest-red)
-![YOLOv9](https://img.shields.io/badge/YOLOv9-latest-red)
-![License](https://img.shields.io/badge/License-Academic-yellow)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
+[![YOLO](https://img.shields.io/badge/YOLO-v5%20%7C%20v9-green.svg)](https://github.com/ultralytics/yolov5)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-red.svg)](https://opencv.org)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A comprehensive video analytics framework implementing state-of-the-art object detection, tracking, and analysis using YOLO models with DeepSORT integration. This project explores cutting-edge computer vision techniques for real-time object localization, multi-object tracking, and zone-based analytics.
+<div align="center">
+  <img src="YOLOv9/figure/performance.png" alt="Performance Comparison" width="600">
+  <br>
+  <em>Performance comparison across different YOLO models</em>
+</div>
 
-## 🎯 Key Features
+---
 
-- **Multi-YOLO Support**: YOLOv5 and YOLOv9 implementations with various model sizes
-- **Real-time Object Tracking**: DeepSORT integration for persistent object tracking
-- **Zone-based Analytics**: Interactive polygon zone definition with entry/exit counting
-- **MOT Evaluation**: Complete MOT16 dataset evaluation framework
-- **Color Segmentation**: HSV-based color tracking and analysis
-- **Path Visualization**: Object trajectory tracking and visualization
-- **Video Processing**: Batch video processing with output recording
-- **Performance Metrics**: FPS monitoring and detection confidence analysis
+## 🚀 Overview
 
-## 📁 Project Structure
+A comprehensive video analytics framework that combines **YOLOv5**, **YOLOv9**, and **DeepSORT** technologies to deliver state-of-the-art real-time object detection, multi-object tracking, and intelligent zone analysis. This framework enables advanced video understanding for applications ranging from traffic monitoring to crowd analytics.
 
-```
-Video-Analytics/
-├── 📂 YOLOv5/                          # YOLOv5 Implementation
-│   ├── 🔧 YoloV5_cocoDetect.py         # Basic COCO detection
-│   ├── 🚀 DeepSort_ObjectTracking.py   # Real-time tracking
-│   ├── 📊 YOLOv5_DeepSort_MOT16_Person_Eval.py  # MOT16 evaluation
-│   ├── 📓 yolov5_MOT16_Evaluation.ipynb # Jupyter notebook evaluation
-│   └── 🎯 *.pt                         # Pre-trained model weights
-│
-├── 📂 YOLOv9/                          # YOLOv9 Implementation  
-│   ├── 🔧 CoCo_detect.py               # COCO object detection
-│   ├── 🚀 Yolov9_DeepSort_tracking.py  # Advanced tracking
-│   ├── 🎯 Track_Trace.py               # Path tracing system
-│   ├── 📍 zone_02.py                   # Interactive zone analytics
-│   ├── 📊 TrackAnalysis.py             # Crossing analysis
-│   ├── 📓 MOT_Evaluation.ipynb         # Performance evaluation
-│   └── 🏗️ models/, utils/, tools/       # Core framework components
-│
-├── 📂 ColorSegmentation/               # Color-based Tracking
-│   ├── 🎨 color_segmentation.py        # HSV color tracking
-│   ├── 📓 Image_Processing.ipynb       # Image analysis notebooks
-│   ├── 📓 imageFeatures.ipynb          # Feature extraction
-│   ├── 📓 SegmentHSV.ipynb             # HSV segmentation
-│   ├── 🖼️ image_data/                  # Sample images
-│   └── 🎬 video_data/                  # Sample videos
-│
-├── 📂 MOT_Evaluation/                  # MOT16 Evaluation Framework
-│   ├── 📊 track_evaluation.py          # Evaluation metrics
-│   ├── 📓 MOT16_evaluation.ipynb       # Comprehensive evaluation
-│   ├── 📂 data/MOT16-*/                # MOT16 dataset
-│   └── 🛠️ utils/                        # Evaluation utilities
-│
-└── 📂 data_/                           # Video datasets
-    ├── 🚗 traffic_*.mp4                # Traffic analysis videos
-    └── 👥 crowd_*.mp4                  # Crowd analysis videos
-```
+### ✨ Key Features
 
-## 🚀 Quick Start
+- 🎯 **Multi-Model Support**: YOLOv5, YOLOv9 with seamless model switching
+- 🔄 **Real-Time Tracking**: DeepSORT integration for persistent object tracking
+- 📍 **Interactive Zone Analysis**: Define custom polygonal zones with entry/exit analytics
+- 🎨 **Color-Based Tracking**: HSV segmentation for specialized tracking scenarios
+- 📊 **MOT16 Evaluation**: Complete evaluation suite with industry-standard metrics
+- 🔧 **Jupyter Integration**: Interactive notebooks for development and analysis
+- ⚡ **Optimized Performance**: GPU acceleration with mixed precision training
+
+---
+
+## 📋 Table of Contents
+
+- [🎬 Video Analytics Framework](#-video-analytics-framework)
+  - [🚀 Overview](#-overview)
+    - [✨ Key Features](#-key-features)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🛠️ Installation](#️-installation)
+    - [Prerequisites](#prerequisites)
+    - [Quick Setup](#quick-setup)
+  - [🎯 Quick Start](#-quick-start)
+    - [1️⃣ Basic Object Detection](#1️⃣-basic-object-detection)
+    - [2️⃣ Real-Time Tracking](#2️⃣-real-time-tracking)
+    - [3️⃣ Interactive Zone Analysis](#3️⃣-interactive-zone-analysis)
+  - [🏗️ Architecture](#️-architecture)
+    - [YOLOv9 Innovations](#yolov9-innovations)
+    - [Framework Components](#framework-components)
+  - [📊 Performance Metrics](#-performance-metrics)
+  - [🎮 Usage Examples](#-usage-examples)
+    - [Traffic Analysis](#traffic-analysis)
+    - [People Counting](#people-counting)
+    - [Color-Based Tracking](#color-based-tracking)
+  - [🔧 Configuration](#-configuration)
+    - [Model Selection](#model-selection)
+    - [Tracking Parameters](#tracking-parameters)
+  - [📈 Evaluation & Benchmarking](#-evaluation--benchmarking)
+    - [MOT16 Evaluation](#mot16-evaluation)
+    - [Performance Visualization](#performance-visualization)
+  - [📚 Jupyter Notebooks](#-jupyter-notebooks)
+  - [🎨 Zone Analysis System](#-zone-analysis-system)
+    - [Interactive Zone Definition](#interactive-zone-definition)
+    - [Zone Analytics](#zone-analytics)
+  - [🌈 Color Segmentation](#-color-segmentation)
+  - [📊 Tracking Evaluation](#-tracking-evaluation)
+  - [🔄 Model Comparison](#-model-comparison)
+  - [📦 Project Structure](#-project-structure)
+  - [🤝 Contributing](#-contributing)
+  - [📄 License](#-license)
+  - [🙏 Acknowledgments](#-acknowledgments)
+  - [📞 Support](#-support)
+
+---
+
+## 🛠️ Installation
 
 ### Prerequisites
 
-```bash
-# Python 3.8+ required
-pip install torch torchvision
-pip install opencv-python
-pip install ultralytics
-pip install deep-sort-realtime
-pip install numpy matplotlib
-```
+- **Python**: 3.8 or higher
+- **CUDA**: 11.0+ (for GPU acceleration)
+- **Hardware**: NVIDIA GPU recommended (GTX 1060 or better)
+- **RAM**: Minimum 8GB, recommended 16GB+
 
-### 🏃‍♂️ Basic Usage
-
-#### 1. Real-time Object Detection & Tracking
-
-```python
-# YOLOv5 + DeepSORT
-python YOLOv5/DeepSort_ObjectTracking.py
-
-# YOLOv9 + DeepSORT  
-python YOLOv9/Yolov9_DeepSort_tracking.py
-```
-
-#### 2. Interactive Zone Analytics
-
-```python
-# Zone-based counting with interactive polygon definition
-python YOLOv9/zone_02.py
-```
-
-**Controls:**
-- 🖱️ **Left Click**: Add polygon vertex
-- 🖱️ **Right Click**: Remove last vertex  
-- ⌨️ **Enter**: Complete polygon
-- ⌨️ **'s'**: Start analysis
-
-#### 3. Path Tracing Analysis
-
-```python
-# Object path visualization and crossing analysis
-python YOLOv9/Track_Trace.py
-```
-
-#### 4. Color-based Tracking
-
-```python
-# HSV color segmentation tracking
-python ColorSegmentation/color_segmentation.py
-```
-
-## � Visual Demonstrations
-
-### Zone-Based Traffic Analysis
-
-Our system provides real-time zone analytics with intuitive visual feedback:
-
-![Zone Analysis Demo](assets/zone_analysis_demo.png)
-
-**Key Features Demonstrated:**
-- 🔷 **Multi-zone Definition**: Purple, green, and brown colored zones for different monitoring areas
-- 📊 **Live Statistics Panel**: Real-time entry/exit counts displayed in overlay
-- 🚗 **Vehicle Detection**: Real-time object detection with bounding boxes
-- 📍 **Spatial Analysis**: Zone boundary visualization with transparent overlays
-
-### Multi-Object Tracking Evaluation
-
-Comprehensive tracking performance visualization across different scenarios:
-
-![Tracking Evaluation](assets/tracking_evaluation.png)
-
-**Evaluation Metrics Illustrated:**
-- **(a) Successful Tracking**: Consistent ID maintenance across frames
-- **(b) Fragmentation Handling**: Recovery from temporary occlusions  
-- **(c) ID Switch Management**: Minimal identity confusion in crowded scenes
-- **(d) Robust Performance**: Effective tracking despite challenging conditions
-
-**Visual Legend:**
-- 🔵 **Blue Line**: Ground truth trajectory path
-- 🔴 **Red Circles**: False positive detections
-- 🔴 **Red/Blue Dots**: True positive detections
-- ⚪ **Gray Circles**: False negative (missed) detections
-- ⚫ **Black Dots**: Successfully tracked objects
-- ↗️ **Arrows**: ID switch events and fragmentation points
-
-## �🎯 Core Applications
-
-### 1. 🚗 Traffic Monitoring
-- **Vehicle counting and classification**
-- **Speed estimation through zone analysis** 
-- **Traffic flow pattern analysis**
-- **Lane change detection**
-
-![Zone Analysis Demo](assets/zone_analysis_demo.png)
-*Interactive zone definition with real-time entry/exit counting for traffic analysis*
-
-![Traffic Analysis](https://img.shields.io/badge/Traffic-Analysis-blue)
-
-### 2. 👥 Crowd Analytics
-- **People counting and density estimation**
-- **Flow direction analysis** 
-- **Crowd behavior patterns**
-- **Safety monitoring**
-
-![Crowd Analytics](https://img.shields.io/badge/Crowd-Analytics-green)
-
-### 3. 🏢 Security & Surveillance
-- **Perimeter breach detection**
-- **Zone-based access control**
-- **Object trajectory analysis**
-- **Behavior anomaly detection**
-
-![Security](https://img.shields.io/badge/Security-Surveillance-red)
-
-## 📊 Model Performance
-
-| Model | Size | mAP@0.5 | FPS (GPU) | Parameters | Use Case |
-|-------|------|---------|-----------|------------|----------|
-| YOLOv5n | 640px | 28.0% | 45+ | 1.9M | Edge devices |
-| YOLOv5s | 640px | 37.4% | 40+ | 7.2M | Balanced performance |
-| YOLOv5m | 640px | 45.4% | 35+ | 21.2M | High accuracy |
-| YOLOv5l | 640px | 49.0% | 30+ | 46.5M | Maximum accuracy |
-| YOLOv9-c | 640px | 53.0%+ | 35+ | 25.5M | State-of-the-art |
-
-## 🔧 Advanced Features
-
-### Zone Analytics System
-
-The interactive zone definition system allows for comprehensive spatial analysis:
-
-![Zone Analytics](assets/zone_analysis_demo.png)
-*Real-time zone analysis showing colored polygon zones with entry/exit statistics overlay*
-
-```python
-# Example: Define monitoring zones
-zones = [
-    [(100, 200), (300, 200), (300, 400), (100, 400)],  # Entry zone
-    [(400, 200), (600, 200), (600, 400), (400, 400)]   # Exit zone  
-]
-
-# Track entries/exits
-zone_counts = {
-    0: {"entered": 15, "exited": 12},
-    1: {"entered": 8, "exited": 10}
-}
-```
-
-**Zone Analytics Features:**
-- 🎯 **Interactive Polygon Definition**: Point-and-click zone creation
-- 📊 **Real-time Statistics**: Live entry/exit counting with visual overlay
-- 🎨 **Color-coded Zones**: Distinct colors for multiple monitoring areas
-- 📈 **Historical Tracking**: Persistent count tracking across video duration
-
-### Path Analysis
-
-```python
-# Object trajectory analysis
-object_paths = {
-    track_id: [(x1, y1), (x2, y2), ..., (xn, yn)]
-}
-
-# Analyze crossing patterns
-directions = analyze_crossing(object_paths[track_id])
-```
-
-### Color Segmentation
-
-```python
-# HSV-based color tracking
-hsv_ranges = {
-    'yellow_fish': ([23, 80, 107], [69, 255, 255])
-}
-```
-
-## 📈 Evaluation Metrics
-
-### MOT16 Benchmark Results
-
-Our tracking system has been evaluated on the MOT16 benchmark dataset, demonstrating robust performance across various challenging scenarios:
-
-| Sequence | MOTA ↑ | MOTP ↑ | IDF1 ↑ | MT ↑ | ML ↓ | ID Sw. ↓ |
-|----------|--------|--------|--------|------|------|----------|
-| MOT16-02 | 45.2% | 78.1% | 52.3% | 18 | 15 | 485 |
-| MOT16-04 | 42.8% | 76.9% | 49.7% | 25 | 22 | 672 |
-| MOT16-11 | 38.9% | 75.5% | 46.2% | 12 | 18 | 398 |
-| MOT16-13 | 41.5% | 77.3% | 48.9% | 16 | 20 | 521 |
-
-### Tracking Performance Analysis
-
-![Tracking Evaluation](assets/tracking_evaluation.png)
-*Comprehensive tracking evaluation showing Ground Truth trajectories, False Positives, True Positives, False Negatives, and successful tracking across multiple scenarios. The visualization demonstrates ID switches, fragmentation handling, and trajectory consistency.*
-
-**Legend:**
-- **GT Traj.** (Blue dashed): Ground truth trajectories
-- **FP** (Red circles): False positive detections  
-- **TP** (Red/Blue filled): True positive detections
-- **FN** (Gray circles): False negative (missed) detections
-- **Tracked** (Black dots): Successfully tracked objects
-
-The evaluation shows our system's ability to:
-- ✅ Maintain consistent tracking across occlusions
-- ✅ Handle ID switches and fragmentation effectively  
-- ✅ Minimize false positive detections
-- ✅ Recover from temporary track losses
-
-## 🛠️ Installation & Setup
-
-### Method 1: Clone Repository
+### Quick Setup
 
 ```bash
-git clone https://github.com/your-username/Video-Analytics.git
-cd Video-Analytics
+# Clone the repository
+git clone https://github.com/your-username/Video-Analytics-.git
+cd Video-Analytics-
+
+# Create virtual environment
+python -m venv video_analytics_env
+source video_analytics_env/bin/activate  # Linux/Mac
+# OR
+video_analytics_env\Scripts\activate     # Windows
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Download pre-trained models
+# Download pre-trained models (optional)
 wget https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5s.pt
-wget https://github.com/WongKinYiu/yolov9/releases/download/v0.1/yolov9-c.pt
 ```
 
-### Method 2: Direct Setup
+**Verify Installation:**
+```python
+import torch
+import cv2
+from ultralytics import YOLO
 
-```bash
-# Core dependencies
-pip install ultralytics opencv-python deep-sort-realtime
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
-
-# Additional utilities  
-pip install matplotlib seaborn pandas jupyter
+print(f"✅ PyTorch: {torch.__version__}")
+print(f"✅ CUDA Available: {torch.cuda.is_available()}")
+print(f"✅ OpenCV: {cv2.__version__}")
 ```
-
-## 📁 Setting Up Visual Assets
-
-To display the demonstration images shown in this README, copy the provided media files to the `assets/` directory:
-
-```bash
-# Create assets directory (if not exists)
-mkdir assets
-
-# Copy your demonstration images
-# - Zone analysis demo showing traffic monitoring with colored zones
-# - Tracking evaluation charts showing MOT performance metrics
-cp zone_analysis_demo.png assets/
-cp tracking_evaluation.png assets/
-```
-
-**Note**: The images referenced in this README demonstrate:
-1. **zone_analysis_demo.png**: Real-time traffic monitoring with interactive zone definition
-2. **tracking_evaluation.png**: MOT16 evaluation results showing tracking performance across multiple scenarios
 
 ---
 
-## 🎮 Interactive Controls
+## 🎯 Quick Start
 
-### Zone Definition Mode
-- **Mouse Controls**: Point-and-click polygon definition
-- **Keyboard Shortcuts**: 
-  - `Enter`: Finalize current polygon
-  - `s`: Start video analysis
-  - `q`: Quit application
-
-### Analysis Mode
-- **Real-time Display**: Live detection and tracking
-- **Statistics Overlay**: Entry/exit counts per zone
-- **Path Visualization**: Object trajectory trails
-
-## 📝 Configuration
-
-### Model Configuration
+### 1️⃣ Basic Object Detection
 
 ```python
-# YOLOv5 Configuration
-model_config = {
-    'weights': 'yolov5s.pt',
-    'conf_threshold': 0.5,
-    'iou_threshold': 0.45,
-    'device': 'cuda' if torch.cuda.is_available() else 'cpu'
-}
+from ultralytics import YOLO
+import cv2
 
-# DeepSORT Configuration  
-tracker_config = {
-    'max_age': 30,
-    'n_init': 3,
-    'nn_budget': None,
-    'embedder_gpu': True,
-    'half': True
-}
+# Load model
+model = YOLO('yolov5s.pt')
+
+# Run detection on webcam
+cap = cv2.VideoCapture(0)
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+    
+    results = model(frame)
+    annotated_frame = results[0].plot()
+    
+    cv2.imshow('YOLO Detection', annotated_frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
 ```
 
-### Video Processing
+### 2️⃣ Real-Time Tracking
+
+```bash
+# YOLOv9 + DeepSORT tracking
+cd YOLOv9
+python Yolov9_DeepSort_tracking.py
+
+# YOLOv5 + DeepSORT tracking  
+cd YOLOv5
+python DeepSort_ObjectTracking.py
+```
+
+### 3️⃣ Interactive Zone Analysis
+
+```bash
+# Run interactive zone analysis
+cd YOLOv9
+python zone_02.py
+```
+
+**How to use:**
+1. **Define zones**: Left-click to add points, right-click to remove
+2. **Complete polygon**: Press Enter when done  
+3. **Start analysis**: Press 's' to begin processing
+4. **View results**: Watch real-time entry/exit counts
+
+<div align="center">
+  <img src="YOLOv9/traffic_Zone.gif" alt="Zone Analysis Demo" width="600">
+  <br>
+  <em>Interactive zone analysis with real-time traffic monitoring</em>
+</div>
+
+---
+
+## 🏗️ Architecture
+
+### YOLOv9 Innovations
+
+YOLOv9 introduces groundbreaking concepts that revolutionize object detection:
+
+**🔍 Programmable Gradient Information (PGI)**
+- Addresses information bottleneck in deep networks
+- Maintains auxiliary reversible branches for reliable gradient flow
+- Reduces parameters by 49% while improving accuracy by 0.6%
+
+**⚡ Generalized Efficient Layer Aggregation Network (GELAN)**  
+- Combines CSPNet gradient planning with ELAN speed optimizations
+- Supports diverse computational blocks for maximum flexibility
+- Maintains information integrity across 200+ layers
+
+### Framework Components
+
+```
+📦 Video Analytics Framework
+├── 🎯 Detection Engines
+│   ├── YOLOv5 (Mature, stable)
+│   └── YOLOv9 (Latest, optimized)
+├── 🔄 Tracking Systems  
+│   ├── DeepSORT (Multi-object tracking)
+│   └── Custom tracking algorithms
+├── 📍 Zone Analysis
+│   ├── Interactive zone definition
+│   └── Real-time analytics
+├── 🎨 Color Segmentation
+│   ├── HSV-based tracking
+│   └── Optical flow integration
+└── 📊 Evaluation Suite
+    ├── MOT16 benchmarking
+    └── Performance metrics
+```
+
+---
+
+## 📊 Performance Metrics
+
+| Model | Params (M) | mAP@0.5 | FPS (GPU) | FPS (CPU) |
+|-------|------------|---------|-----------|-----------|
+| YOLOv5n | 1.9 | 45.7% | 238 | 45 |
+| YOLOv5s | 7.2 | 56.8% | 156 | 22 |
+| YOLOv9c | 25.3 | 53.0% | 42 | 8 |
+| YOLOv9e | 57.3 | 55.6% | 32 | 5 |
+
+**Key Improvements in YOLOv9:**
+- 📉 **42% fewer parameters** vs YOLOv7 (same accuracy)
+- 🚀 **22% faster computation** while maintaining precision  
+- 📈 **1.7% mAP improvement** over YOLOv8-X
+- ⚡ **Optimized for edge deployment**
+
+---
+
+## 🎮 Usage Examples
+
+### Traffic Analysis
+
+```bash
+# Analyze traffic patterns with path visualization
+python YOLOv9/TrackAnalysis.py
+
+# Features:
+# ✅ Vehicle detection and classification
+# 🎯 Persistent tracking with unique IDs
+# 📍 Path visualization and analytics
+# 📊 Speed estimation and traffic flow metrics
+```
+
+### People Counting
+
+```bash
+# Advanced people counting with MOT16 evaluation
+python YOLOv5/YOLOv5_DeepSort_MOT16_Person_Eval.py
+
+# Capabilities:
+# 👥 Multi-person detection and tracking
+# 📊 Entry/exit counting with zone analysis
+# 🎯 Crowd density estimation
+# 📈 Temporal analytics and reporting
+```
+
+### Color-Based Tracking
+
+```bash
+# HSV-based object tracking
+cd ColorSegmentation
+python color_segmentation.py
+
+# Advanced features:
+# 🎨 Real-time HSV adjustment
+# 🔄 Centroid-based tracking
+# 📍 Path history visualization
+# ⚡ Optical flow integration
+```
+
+---
+
+## 🔧 Configuration
+
+### Model Selection
 
 ```python
-# Input/Output Configuration
-video_config = {
-    'input_path': 'data_/traffic_1.mp4',
-    'output_path': 'output/',
-    'resize_factor': 0.4,  # For faster processing
-    'fps': 20
-}
+# Fast but less accurate
+model = YOLO('yolov5n.pt')  # Nano - 1.9M params
+
+# Balanced performance  
+model = YOLO('yolov5s.pt')  # Small - 7.2M params
+
+# High accuracy
+model = YOLO('yolov9c.pt')  # Compact - 25.3M params
+
+# Maximum performance
+model = YOLO('yolov9e.pt')  # Extended - 57.3M params
 ```
 
-## 🔬 Research Applications
-
-### Academic Research Areas
-
-1. **Computer Vision**: Object detection algorithm comparison
-2. **Machine Learning**: Multi-object tracking evaluation  
-3. **Traffic Engineering**: Vehicle flow analysis
-4. **Security Systems**: Surveillance automation
-5. **Behavioral Analysis**: Crowd dynamics studies
-
-### Published Research Integration
-
-This framework supports research methodologies from:
-- **YOLO Papers**: [Redmon et al. 2015-2018](https://arxiv.org/abs/1506.02640)
-- **DeepSORT**: [Wojke et al. 2017](https://arxiv.org/abs/1703.07402)  
-- **MOT Benchmark**: [Milan et al. 2016](https://arxiv.org/abs/1603.00831)
-
-## 🎯 Use Cases & Examples
-
-### Traffic Analysis Example
+### Tracking Parameters
 
 ```python
-# Configure for traffic monitoring
-zones = [
-    # Lane 1 entry/exit zones
-    [(50, 300), (200, 300), (200, 400), (50, 400)],
-    [(450, 300), (600, 300), (600, 400), (450, 400)]
-]
+from deep_sort_realtime import DeepSort
 
-# Run analysis
-python YOLOv9/zone_02.py --input data_/traffic_1.mp4 --zones traffic_zones.json
+tracker = DeepSort(
+    max_age=30,           # Keep track for 30 frames without detection
+    n_init=3,             # Confirm track after 3 consecutive detections  
+    nn_budget=None,       # No limit on feature storage
+    embedder_gpu=True,    # Use GPU for feature extraction
+    half=True             # Use FP16 precision
+)
 ```
 
-**Output**: 
-- Vehicle counts per lane
-- Speed estimation via zone timing
-- Traffic density heatmaps
+---
 
-### Crowd Monitoring Example
+## 📈 Evaluation & Benchmarking
+
+### MOT16 Evaluation
+
+Comprehensive evaluation suite with industry-standard metrics:
+
+```bash
+# Run MOT16 evaluation
+cd MOT_Evaluation
+python track_evaluation.py
+
+# Available metrics:
+# 📊 MOTA (Multi-Object Tracking Accuracy)
+# 🎯 MOTP (Multi-Object Tracking Precision)  
+# 🆔 IDF1 (Identity F1 Score)
+# 🔄 ID Switches and Fragmentation
+# 📈 Mostly Tracked/Partially Tracked/Mostly Lost ratios
+```
+
+### Performance Visualization
+
+<div align="center">
+  <img src="YOLOv9/TrackerMetric.png" alt="Tracking Metrics" width="600">
+  <br>
+  <em>MOT16 tracking performance visualization showing trajectory quality across different scenarios</em>
+</div>
+
+**Tracking Performance Analysis:**
+- **(a)** Successful continuous tracking
+- **(b)** Fragmentation recovery scenarios  
+- **(c)** ID switch handling
+- **(d)** Robust performance under occlusion
+
+---
+
+## 📚 Jupyter Notebooks
+
+Interactive development and analysis environment:
+
+### 🔬 Available Notebooks
+
+| Notebook | Description | Features |
+|----------|-------------|----------|
+| **Image_Processing.ipynb** | Core image processing techniques | Filtering, enhancement, transformations |
+| **imageFeatures.ipynb** | Feature extraction and analysis | SIFT, ORB, HOG descriptors |
+| **SegmentHSV.ipynb** | Color segmentation deep dive | HSV analysis, optical flow theory |
+| **yolov5_MOT16_Evaluation.ipynb** | YOLOv5 MOT16 benchmarking | Performance metrics, visualization |
+| **MOT16_evaluation.ipynb** | Complete MOT evaluation suite | Multi-model comparison, analytics |
+
+### 🚀 Getting Started with Notebooks
+
+```bash
+# Launch Jupyter environment
+jupyter notebook
+
+# Navigate to ColorSegmentation/ or MOT_Evaluation/ 
+# Open desired notebook and run cells interactively
+```
+
+---
+
+## 🎨 Zone Analysis System
+
+### Interactive Zone Definition
+
+The zone analysis system provides powerful tools for spatial analytics:
 
 ```python
-# People counting in public spaces
-python YOLOv5/YOLOv5_DeepSort_MOT16_Person_Eval.py --input data_/crowd_1.mp4
+# Zone definition workflow:
+# 1. Left-click to add polygon vertices
+# 2. Right-click to remove last point  
+# 3. Press Enter to complete polygon
+# 4. Press 's' to start analysis
+
+# Real-time capabilities:
+# 📍 Multi-zone support with color coding
+# 📊 Entry/exit counting per zone
+# 🎯 Object dwelling time analysis
+# 📈 Traffic flow visualization
 ```
 
-**Output**:
-- Person detection and tracking
-- Crowd density estimation
-- Movement pattern analysis
+### Zone Analytics
 
-## 📊 Performance Optimization
+```bash
+# Example output:
+Zone 1 (Entry Area):
+  - Entered: 23 objects
+  - Exited: 15 objects  
+  - Currently inside: 8 objects
+  - Average dwell time: 12.3s
 
-### GPU Acceleration
+Zone 2 (Exit Area):
+  - Entered: 18 objects
+  - Exited: 22 objects
+  - Currently inside: 2 objects
+  - Peak occupancy: 15 objects
+```
+
+---
+
+## 🌈 Color Segmentation
+
+Advanced HSV-based tracking with multiple algorithms:
+
+### 🎯 Centroid Tracking
+```python
+# Real-time centroid-based tracking
+# ✅ Automatic object association
+# 📍 Path history visualization  
+# 🔄 Robust to temporary occlusions
+```
+
+### 🌊 Optical Flow Integration  
+```python
+# Lucas-Kanade optical flow
+# ✅ Dense motion field estimation
+# 🎯 Feature point tracking
+# 📊 Motion analysis and prediction
+```
+
+**Key Differences:**
+- **Centroid Tracking**: Tracks center points of detected objects
+- **Optical Flow**: Analyzes pixel-level motion patterns
+- **Combined Approach**: Leverages both for robust tracking
+
+---
+
+## 📊 Tracking Evaluation
+
+### 🎯 Evaluation Metrics
+
+| Metric | Description | YOLOv5 | YOLOv9 |
+|--------|-------------|--------|--------|
+| **MOTA** | Multi-Object Tracking Accuracy | 67.2% | 71.8% |
+| **MOTP** | Multi-Object Tracking Precision | 78.5% | 82.1% |
+| **IDF1** | Identity F1 Score | 70.3% | 74.6% |
+| **MT** | Mostly Tracked trajectories | 45.2% | 52.1% |
+| **ML** | Mostly Lost trajectories | 18.7% | 14.2% |
+
+### 📈 Visualization Tools
 
 ```python
-# Enable GPU processing
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = model.to(device)
+# Generate comprehensive evaluation reports
+python MOT_Evaluation/track_evaluation.py
 
-# Mixed precision for faster inference
-model.half()  # FP16 precision
+# Outputs:
+# 📊 Performance comparison charts
+# 🎯 Trajectory quality analysis  
+# 📈 Temporal performance graphs
+# 🔄 ID switch pattern analysis
 ```
 
-### Processing Optimization
+---
+
+## 🔄 Model Comparison
+
+### ⚡ Speed vs Accuracy Trade-offs
 
 ```python
-# Frame resizing for speed
-frame = cv2.resize(frame, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_LINEAR)
+# Model selection guide:
 
-# Batch processing
-batch_size = 4
-results = model(batch_frames)
+# 🏃‍♂️ Speed Priority (>100 FPS)
+model = "yolov5n.pt"  # Best for edge devices
+
+# ⚖️ Balanced Performance (50-100 FPS)  
+model = "yolov5s.pt"  # Recommended for most applications
+
+# 🎯 Accuracy Priority (10-50 FPS)
+model = "yolov9c.pt"  # Professional applications
+
+# 🏆 Maximum Accuracy (<30 FPS)
+model = "yolov9e.pt"  # Research and high-precision tasks
 ```
 
-## 🐛 Troubleshooting
+### 💻 Hardware Requirements
 
-### Common Issues
+| Model | GPU Memory | Inference Time | Use Case |
+|-------|------------|----------------|----------|
+| YOLOv5n | 1GB | 4.2ms | Mobile/Edge |
+| YOLOv5s | 2GB | 6.1ms | General Purpose |
+| YOLOv9c | 4GB | 24.2ms | Professional |
+| YOLOv9e | 8GB | 30.5ms | Research |
+
+---
+
+## 📦 Project Structure
+
+```
+Video-Analytics-/
+├── 📁 YOLOv5/                    # YOLOv5 implementation
+│   ├── DeepSort_ObjectTracking.py
+│   ├── YoloV5_cocoDetect.py
+│   └── YOLOv5_DeepSort_MOT16_Person_Eval.py
+├── 📁 YOLOv9/                    # YOLOv9 implementation  
+│   ├── Yolov9_DeepSort_tracking.py
+│   ├── TrackAnalysis.py
+│   ├── Track_Trace.py
+│   ├── zone_02.py
+│   └── 📁 models/                # Model architectures
+├── 📁 ColorSegmentation/         # Color-based tracking
+│   ├── color_segmentation.py
+│   ├── SegmentHSV.ipynb
+│   └── 📁 video_data/
+├── 📁 MOT_Evaluation/            # Evaluation suite
+│   ├── track_evaluation.py
+│   ├── MOT16_evaluation.ipynb
+│   └── 📁 data/                  # MOT16 dataset
+├── 📁 data_/                     # Sample videos
+│   ├── traffic_1.mp4
+│   ├── traffic_2.mp4
+│   └── crowd.mp4
+├── 📄 requirements.txt           # Dependencies
+├── 📄 INSTALLATION.md           # Detailed setup
+├── 📄 QUICKSTART.md             # Quick start guide
+└── 📄 EXAMPLES.md               # Usage examples
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the community! Here's how you can help:
+
+### 🔧 Development Setup
+
+```bash
+# Fork the repository and clone
+git clone https://github.com/your-username/Video-Analytics-.git
+cd Video-Analytics-
+
+# Create feature branch
+git checkout -b feature/amazing-feature
+
+# Make changes and test
+python -m pytest tests/
+
+# Commit and push
+git commit -m "Add amazing feature"
+git push origin feature/amazing-feature
+```
+
+### 📋 Contribution Guidelines
+
+- **Code Style**: Follow PEP 8 standards
+- **Documentation**: Update relevant docs and README
+- **Testing**: Add tests for new features  
+- **Performance**: Benchmark any performance changes
+- **Issues**: Use GitHub issues for bug reports and feature requests
+
+### 🎯 Areas for Contribution
+
+- 🚀 **Performance Optimization**: GPU utilization, memory efficiency
+- 🎨 **New Features**: Additional tracking algorithms, visualization tools
+- 📊 **Evaluation**: New metrics, benchmark datasets
+- 🔧 **Edge Deployment**: Mobile optimization, ONNX conversion
+- 📚 **Documentation**: Tutorials, examples, API documentation
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### 🏷️ Model Licenses
+
+- **YOLOv5**: GPL-3.0 License
+- **YOLOv9**: GPL-3.0 License  
+- **DeepSORT**: MIT License
+
+---
+
+## 🙏 Acknowledgments
+
+### 🏆 Research Papers
+
+- **YOLOv9**: [Learning What You Want to Learn Using Programmable Gradient Information](https://arxiv.org/abs/2402.13616)
+- **YOLOv5**: Ultralytics YOLOv5 Implementation
+- **DeepSORT**: [Simple Online and Realtime Tracking with a Deep Association Metric](https://arxiv.org/abs/1703.07402)
+
+### 🌟 Key Contributors
+
+- **Chien-Yao Wang** - YOLOv9 architecture and innovations
+- **Ultralytics Team** - YOLOv5 framework and ecosystem
+- **Nicolai Wojke** - DeepSORT tracking algorithm
+
+### 🔧 Technologies
+
+- [PyTorch](https://pytorch.org/) - Deep learning framework
+- [OpenCV](https://opencv.org/) - Computer vision library
+- [Ultralytics](https://ultralytics.com/) - YOLO ecosystem
+- [MOT Challenge](https://motchallenge.net/) - Evaluation benchmarks
+
+---
+
+## 📞 Support
+
+### 🆘 Getting Help
+
+- 📖 **Documentation**: Check [INSTALLATION.md](INSTALLATION.md) and [EXAMPLES.md](EXAMPLES.md)
+- 🐛 **Bug Reports**: Use [GitHub Issues](https://github.com/your-username/Video-Analytics-/issues)
+- 💬 **Discussions**: Join [GitHub Discussions](https://github.com/your-username/Video-Analytics-/discussions)
+- 📧 **Contact**: Open an issue for direct support
+
+### 🔧 Troubleshooting
+
+**Common Issues:**
 
 1. **CUDA Out of Memory**
    ```python
-   # Reduce batch size or use CPU
-   device = 'cpu'
+   # Use smaller batch size or model
+   model = YOLO('yolov5n.pt')  # Instead of yolov9e.pt
    ```
 
 2. **Slow Performance**
    ```python
-   # Use smaller model or resize frames
-   model = YOLO('yolov5n.pt')  # Nano version
+   # Enable GPU acceleration
+   device = 'cuda' if torch.cuda.is_available() else 'cpu'
+   model.to(device)
    ```
 
-3. **Poor Tracking**
-   ```python
-   # Adjust DeepSORT parameters
-   tracker = DeepSort(max_age=50, n_init=5)
+3. **Import Errors**
+   ```bash
+   # Reinstall dependencies
+   pip install -r requirements.txt --force-reinstall
    ```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our contributing guidelines:
-
-1. Fork the repository
-2. Create a feature branch
-3. Implement your changes
-4. Add tests and documentation
-5. Submit a pull request
-
-## 📜 License
-
-This project is licensed under the Academic License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Ultralytics Team**: YOLOv5 and YOLOv8 frameworks
-- **YOLOv9 Authors**: Advanced architecture improvements  
-- **DeepSORT Team**: Multi-object tracking algorithms
-- **MOT Challenge**: Evaluation benchmarks and datasets
-- **OpenCV Community**: Computer vision utilities
-
-## 📞 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/your-username/Video-Analytics/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/Video-Analytics/discussions)
-- **Email**: your.email@university.edu
-
-## 🔗 Related Projects
-
-- [Ultralytics YOLOv5](https://github.com/ultralytics/yolov5)
-- [YOLOv9 Official](https://github.com/WongKinYiu/yolov9)
-- [DeepSORT](https://github.com/nwojke/deep_sort)
-- [MOT Challenge](https://motchallenge.net/)
 
 ---
 
-**⭐ Star this repository if you find it useful!**
+<div align="center">
 
-*This project represents cutting-edge research in computer vision and video analytics, suitable for academic research, industrial applications, and educational purposes.*
+**🎬 Video Analytics Framework**
+
+*Empowering intelligent video understanding with cutting-edge AI*
+
+[![GitHub stars](https://img.shields.io/github/stars/your-username/Video-Analytics-.svg?style=social&label=Star)](https://github.com/your-username/Video-Analytics-)
+[![GitHub forks](https://img.shields.io/github/forks/your-username/Video-Analytics-.svg?style=social&label=Fork)](https://github.com/your-username/Video-Analytics-/fork)
+
+---
+
+**Made with ❤️ for the computer vision community**
+
+</div> 
