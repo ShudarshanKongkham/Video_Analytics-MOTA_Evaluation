@@ -645,8 +645,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Empowering intelligent video understanding with cutting-edge AI*
 
-[![GitHub stars](https://img.shields.io/github/stars/your-username/Video-Analytics-.svg?style=social&label=Star)](https://github.com/your-username/Video-Analytics-)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/Video-Analytics-.svg?style=social&label=Fork)](https://github.com/your-username/Video-Analytics-/fork)
+[![GitHub stars](https://img.shields.io/github/stars/your-username/Video-Analytics-.svg?style=social&label=Star)]((https://github.com/ShudarshanKongkham/Video_Analytics-MOTA_Evaluation)-)
+[![GitHub forks](https://img.shields.io/github/forks/your-username/Video-Analytics-.svg?style=social&label=Fork)](https://github.com/ShudarshanKongkham/Video_Analytics-MOTA_Evaluation/fork)
 
 ---
 
